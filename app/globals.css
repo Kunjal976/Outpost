@@ -49,14 +49,16 @@
 }
 
 :root {
+  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.74 0.16 55);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -66,7 +68,7 @@
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --ring: oklch(0.74 0.16 55);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -90,8 +92,8 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary: oklch(0.74 0.16 55);
+  --primary-foreground: oklch(0.145 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -101,7 +103,7 @@
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --ring: oklch(0.74 0.16 55);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -135,3 +137,128 @@
     font-family:inherit;
   }
 }
+
+/* Survey frame and scroll tilt keyframes */
+@keyframes scroll-tilt-settle {
+  from {
+    transform: perspective(1200px) rotateX(16deg) scale(0.96);
+  }
+  to {
+    transform: perspective(1200px) rotateX(0deg) scale(1);
+  }
+}
+
+/* Tailwind v4 @utility directives */
+@utility topo-bg {
+  position: relative;
+  background-image: 
+    radial-gradient(ellipse 75% 50% at 50% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 70%),
+    url('/social/textures/topo-dark.svg');
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@utility survey-frame {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -10px;
+    pointer-events: none;
+    z-index: 20;
+    background:
+      /* Top Left Corner */
+      linear-gradient(#f59e0b, #f59e0b) top left / 16px 2px no-repeat,
+      linear-gradient(#f59e0b, #f59e0b) top left / 2px 16px no-repeat,
+      /* Top Right Corner */
+      linear-gradient(#f59e0b, #f59e0b) top right / 16px 2px no-repeat,
+      linear-gradient(#f59e0b, #f59e0b) top right / 2px 16px no-repeat,
+      /* Bottom Left Corner */
+      linear-gradient(#f59e0b, #f59e0b) bottom left / 16px 2px no-repeat,
+      linear-gradient(#f59e0b, #f59e0b) bottom left / 2px 16px no-repeat,
+      /* Bottom Right Corner */
+      linear-gradient(#f59e0b, #f59e0b) bottom right / 16px 2px no-repeat,
+      linear-gradient(#f59e0b, #f59e0b) bottom right / 2px 16px no-repeat;
+  }
+}
+
+@utility scroll-tilt {
+  transform: none;
+  transform-origin: center top;
+  will-change: transform;
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports ((animation-timeline: scroll()) and (animation-range: 0% 100%)) {
+      animation: scroll-tilt-settle linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0px 500px;
+    }
+  }
+}
+
+/* Tailwind @layer utilities */
+@layer utilities {
+  .topo-bg {
+    position: relative;
+    background-image: 
+      radial-gradient(ellipse 75% 50% at 50% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 70%),
+      url('/social/textures/topo-dark.svg');
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .dark .topo-bg,
+  [data-theme="dark"] .topo-bg,
+  .topo-bg-dark {
+    background-image: 
+      radial-gradient(ellipse 75% 50% at 50% 0%, rgba(245, 158, 11, 0.15) 0%, transparent 70%),
+      url('/social/textures/topo.svg');
+  }
+
+  /* Survey frame: small amber corner marks just outside the element, like crop marks on a map */
+  .survey-frame {
+    position: relative;
+  }
+
+  .survey-frame::before {
+    content: "";
+    position: absolute;
+    inset: -10px;
+    pointer-events: none;
+    z-index: 20;
+    background:
+      /* Top Left Corner */
+      linear-gradient(#f59e0b, #f59e0b) top left / 16px 2px no-repeat,
+      linear-gradient(#f59e0b, #f59e0b) top left / 2px 16px no-repeat,
+      /* Top Right Corner */
+      linear-gradient(#f59e0b, #f59e0b) top right / 16px 2px no-repeat,
+      linear-gradient(#f59e0b, #f59e0b) top right / 2px 16px no-repeat,
+      /* Bottom Left Corner */
+      linear-gradient(#f59e0b, #f59e0b) bottom left / 16px 2px no-repeat,
+      linear-gradient(#f59e0b, #f59e0b) bottom left / 2px 16px no-repeat,
+      /* Bottom Right Corner */
+      linear-gradient(#f59e0b, #f59e0b) bottom right / 16px 2px no-repeat,
+      linear-gradient(#f59e0b, #f59e0b) bottom right / 2px 16px no-repeat;
+  }
+
+  /* Scroll tilt: starts tilted back and settles flat over first 500px of scroll */
+  .scroll-tilt {
+    transform: none;
+    transform-origin: center top;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports ((animation-timeline: scroll()) and (animation-range: 0% 100%)) {
+      .scroll-tilt {
+        animation: scroll-tilt-settle linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0px 500px;
+      }
+    }
+  }
+}
+
